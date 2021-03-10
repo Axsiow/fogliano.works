@@ -59,7 +59,7 @@ services:
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - autoconf:/etc/nginx
+      - /etc/nginx
     environment:
       - ABSOLUTE_URI=https://admin.fogliano.works/admin/ 
   
