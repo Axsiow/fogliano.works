@@ -12,7 +12,7 @@ services:
       - ./web-files:/www:ro
       - ./letsencrypt:/etc/letsencrypt
     environment:
-      - SERVER_NAME=enzo.fogliano.works heather.fogliano.works # replace with your domains
+      - SERVER_NAME=enzo.fogliano.works heather.fogliano.works admin.fogliano.works
       - MULTISITE=yes
       - AUTO_LETS_ENCRYPT=yes
       - REDIRECT_HTTP_TO_HTTPS=yes
@@ -24,6 +24,15 @@ services:
       - enzo.fogliano.works_REMOTE_PHP_PATH=/app
       - heather.fogliano.works_REMOTE_PHP=myheather
       - heather.fogliano.works_REMOTE_PHP_PATH=/app
+      - admin.fogliano.works_SERVE_FILES=no
+      - admin.fogliano.works_USE_AUTH_BASIC=yes
+      - admin.fogliano.works_AUTH_BASIC_USER=admin
+      - admin.fogliano.works_AUTH_BASIC_PASSWORD=admin
+      - admin.fogliano.works_USE_REVERSE_PROXY=yes
+      - admin.fogliano.works_REVERSE_PROXY_URL=/admin/
+      - admin.fogliano.works_REVERSE_PROXY_HOST=http://myui:5000/
+    labels: 
+      - "bunkerized-nginx.UI"
     networks:
       - net1
       - net2
@@ -44,7 +53,18 @@ services:
       - ./web-files/heather.fogliano.works:/app
     networks:
       - net2
-
+    
+  myui:
+    image: bunkerity/bunkerized-nginx-ui
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - autoconf:/etc/nginx
+    environment:
+      - ABSOLUTE_URI=https://admin.fogliano.works/admin/ 
+  
+  volumes: 
+    autoconf:
 
 networks:
   net1:
