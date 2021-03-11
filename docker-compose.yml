@@ -9,10 +9,10 @@ services:
       - 80:8080
       - 443:8443
     volumes:
-      - ./web-files:/www:ro
+      - ./web-files:/home/docker/fogliano.works:ro
       - ./letsencrypt:/etc/letsencrypt
     environment:
-      - SERVER_NAME=www.fogliano.works enzo.fogliano.works heather.fogliano.works
+      - SERVER_NAME=www.fogliano.works enzo.fogliano.works
       - MULTISITE=yes
       - AUTO_LETS_ENCRYPT=yes
       - REDIRECT_HTTP_TO_HTTPS=yes
@@ -21,11 +21,9 @@ services:
       - USE_GZIP=yes
       - USE_BROTLI=yes
       - REMOTE_PHP=myphp
-      - REMOTE_PHP_PATH=/app
+      - REMOTE_PHP_PATH=/home/docker/fogliano.works/app
       - enzo.fogliano.works_REMOTE_PHP=myenzo
-      - enzo.fogliano.works_REMOTE_PHP_PATH=/app
-      - heather.fogliano.works_REMOTE_PHP=myheather
-      - heather.fogliano.works_REMOTE_PHP_PATH=/app
+      - enzo.fogliano.works_REMOTE_PHP_PATH=/home/docker/fogliano.works/enzo
     networks:
       - net1
       - net2
@@ -35,23 +33,15 @@ services:
     image: php:fpm
     restart: always
     volumes:
-      - ./web-files:/app
+      - ./web-files:/home/docker/fogliano.works/app
 
   myenzo:
     image: php:fpm
     restart: always
     volumes:
-      - ./web-files/enzo.fogliano.works:/app
+      - ./web-files/enzo.fogliano.works:/home/docker/fogliano.works/enzo
     networks:
       - net1
-
-  myheather:
-    image: php:fpm
-    restart: always
-    volumes:
-      - ./web-files/heather.fogliano.works:/app
-    networks:
-      - net2
   
 networks:
   net1:
