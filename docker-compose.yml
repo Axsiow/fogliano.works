@@ -12,7 +12,7 @@ services:
       - ./web-files:/www:ro
       - ./letsencrypt:/etc/letsencrypt
     environment:
-      - SERVER_NAME=enzo.fogliano.works heather.fogliano.works
+      - SERVER_NAME=www.fogliano.works enzo.fogliano.works heather.fogliano.works
       - MULTISITE=yes
       - AUTO_LETS_ENCRYPT=yes
       - REDIRECT_HTTP_TO_HTTPS=yes
@@ -20,6 +20,8 @@ services:
       - USE_CLIENT_CACHE=yes
       - USE_GZIP=yes
       - USE_BROTLI=yes
+      - REMOTE_PHP=myphp
+      - REMOTE_PHP_PATH=/app
       - enzo.fogliano.works_REMOTE_PHP=myenzo
       - enzo.fogliano.works_REMOTE_PHP_PATH=/app
       - heather.fogliano.works_REMOTE_PHP=myheather
@@ -27,6 +29,13 @@ services:
     networks:
       - net1
       - net2
+      - net3
+
+  myphp:
+    image: php:fpm
+    restart: always
+    volumes:
+      - ./web-files:/app
 
   myenzo:
     image: php:fpm
@@ -47,3 +56,4 @@ services:
 networks:
   net1:
   net2:
+  net3:
